@@ -1,6 +1,6 @@
 const express = require("express");
 const { createServer } = require("http");
-// const path = require("path");
+const path = require("path");
 // const cookieParser = require("cookie-parser");
 const realTimeServer = require("./realTimeServer.js");
 
@@ -9,14 +9,17 @@ const httpServer = createServer(app);
 
 // Configuraciones
 app.set("port", process.env.PORT || 3000);
-// app.set("views", path.join(__dirname, "views"));
+// app.set("views", path.join(__dirname, "public"));
 // app.use(cookieParser());
 
 // Rutas
 // app.use(require("./routes"));
 
 // Public
-// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 // Iniciar servidor
 httpServer.listen(app.get("port"), () => {
