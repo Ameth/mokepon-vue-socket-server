@@ -16,13 +16,14 @@ app.set("port", process.env.PORT || 3000);
 // app.use(require("./routes"));
 
 // Public
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("dist"));
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile("/dist/index.html");
 });
 
 // Iniciar servidor
 httpServer.listen(app.get("port"), () => {
+  // console.log(__dirname);
   console.log("Servidor corriendo en el puerto " + app.get("port"));
 });
 
