@@ -19,6 +19,8 @@ module.exports = (httpServer) => {
 
     socket.on("saludar", (saludo) => {
       console.log(saludo);
+
+      socket.emit("saludar", "Hola desde el servidor!");
     });
 
     socket.on("disconnect", () => {
@@ -28,14 +30,21 @@ module.exports = (httpServer) => {
       console.log(jugadores);
     });
 
-    // eventos del juego
+    socket.on("admin-limpiar", (data) => {
+      jugadores = [];
+      console.log("Se han limpiado los jugadores!");
+      console.log("Listado actual:", jugadores);
+      socket.emit("admin-limpiar-res", { ...jugadores });
+    });
 
-    // const jugador = (id) => ({
-    //   id: id,
-    //   x: 0,
-    //   y: 0,
-    // });
+    socket.on("obtener-listado", (data) => {
+      socket.emit("listado-actual", jugadores);
+      // console.log("Listado actual:", jugadores);
+    });
 
+    // EVENTOS DEL JUEGO
+
+    // Unirse al juego
     socket.on("joinGame", (mokepon) => {
       // const newId = Math.random();
       jugadores.push({ ...mokepon });
@@ -45,6 +54,7 @@ module.exports = (httpServer) => {
       // console.log(mokepon);
     });
 
+    // Salir del juego
     socket.on("reset", (id) => {
       const jugadorIndex = jugadores.findIndex((item) => item.id === id);
       console.log(`eliminando ${jugadores[jugadorIndex]}`);
@@ -53,6 +63,7 @@ module.exports = (httpServer) => {
       console.log(jugadores);
     });
 
+    // Actualizar posición en el mapa
     socket.on("pos", (newPos) => {
       // console.log(newPos);
 
@@ -62,8 +73,10 @@ module.exports = (httpServer) => {
 
       const jugadorIndex = jugadores.findIndex((item) => item.id === newPos.id);
 
-      jugadores[jugadorIndex].x = newPos.posX;
-      jugadores[jugadorIndex].y = newPos.posY;
+      if (jugadores[jugadorIndex]) {
+        jugadores[jugadorIndex].x = newPos.posX;
+        jugadores[jugadorIndex].y = newPos.posY;
+      }
 
       // console.log(
       //   "x:",
@@ -77,6 +90,7 @@ module.exports = (httpServer) => {
       io.emit("allPos", jugadores);
     });
 
+    // Eviar y recibir ataques
     socket.on("atacar", ({ ataque, id, idEnemigo }) => {
       // console.log("Ataque enviado:", ataque);
       const jugadorIndex = jugadores.findIndex((item) => item.id === id);

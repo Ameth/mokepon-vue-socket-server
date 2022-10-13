@@ -5,11 +5,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <title>Socket server Mokepon Vuejs</title>
 </head>
 
 <body>
-    <h1>Corriendo...!</h1>
+    <h1>Mokepon socket server</h1>
+    <div class="data-container">
+        <div class=""><strong>Total: </strong><span id="dataTotal">0</span></div>
+        <div id="dataView" class="data-view">
+            <table>
+                <tr>
+                    <th>Mokepon</th>
+                    <th>Id</th>
+                    <th>Posición</th>
+                </tr>
+                <tbody id="dataDetails">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="button-container">
+        <button id="btnLimpiar" class="button">Limpiar datos</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>
